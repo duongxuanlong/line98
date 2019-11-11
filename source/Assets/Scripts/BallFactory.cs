@@ -57,6 +57,29 @@ public class BallFactory : MonoBehaviour
     {
         return m_IsBallFactoryInit;
     }
+
+    public Ball GenerateRandomBall (BallMode mode)
+    {
+        int start = (int)BallType.Blue;
+        int end = (int)BallType.Ghost;
+
+        int result = Random.Range(start, end);
+        // result = 0;
+        Ball ball = m_Balls[0];
+        m_Balls.RemoveAt(0);
+
+        ball.SetBallType((BallType)result);
+        ball.SetBallMode(mode);
+        ball.SetBallActive(true);
+        ball.LoadSprite(m_BallSprites[result]);
+
+        return ball;
+    }
+
+    public void AddBallToFactory (Ball ball)
+    {
+        m_Balls.Add(ball);
+    }
     #endregion
 
     #region private methods
@@ -85,6 +108,8 @@ public class BallFactory : MonoBehaviour
         {
             GameObject obj = Instantiate(Pre_Ball, transform);
             Ball script = obj.GetComponent<Ball>();
+            script.InitBall();
+            script.SetBallActive(false);
             m_Balls.Add(script);
             yield return null;
         }

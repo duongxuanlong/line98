@@ -429,7 +429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &900340905
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -600,6 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ffba7eca369de7418e9e2b96b242fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Pre_Board: {fileID: 0}
 --- !u!4 &1034635493
 Transform:
   m_ObjectHideFlags: 0
@@ -1100,6 +1101,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball
       objectReference: {fileID: 0}
+    - target: {fileID: 1879688166776187603, guid: bb548dde68337684cba43a6c9344cf82,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1879688166776187613, guid: bb548dde68337684cba43a6c9344cf82,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1168,6 +1174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BallFactory
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350066499580271939, guid: b91d9edf656b9594a8f7aab44a49a74e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3350066499580271949, guid: b91d9edf656b9594a8f7aab44a49a74e,
         type: 3}

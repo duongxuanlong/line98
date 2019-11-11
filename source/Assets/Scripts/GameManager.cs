@@ -5,6 +5,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    #region prefabs
+    public GameObject Pre_Board;
+    #endregion
+
     void Start()
     {
         

@@ -6,12 +6,15 @@ public class Board : MonoBehaviour
 {
     #region prefabs
     public GameObject Pre_Tile;
+    public GameObject Pre_BallFactory;
     #endregion   
 
     #region variable 
     Tile[,] m_Tiles;
     List<Sprite> m_TileSprites;
+    BallFactory m_BallFactory;
     bool m_IsBoardInit = false;
+    bool m_Temp = false;
     int m_Quota;
     int m_NumberOfBalls;
     #endregion
@@ -19,7 +22,10 @@ public class Board : MonoBehaviour
     #region public methods
     public bool IsBoardInit ()
     {
-        return m_IsBoardInit;
+        if (m_BallFactory == null)
+            return false;
+
+        return m_IsBoardInit && m_BallFactory.IsBallFacotryInit();
     }
     public void InitBoard ()
     {
@@ -28,6 +34,8 @@ public class Board : MonoBehaviour
         m_NumberOfBalls = 0;
 
         LoadTileSprite ();
+
+        GenerateBallFactory();
         
         StartCoroutine(GenerateTiles());
     }
@@ -41,12 +49,25 @@ public class Board : MonoBehaviour
             int i = Random.Range(0, Constant.BOARD_ROW);
             int j = Random.Range(0, Constant.BOARD_COLUMN);
 
-            // if ()
+            Ball ball = m_Tiles[i, j].GetBall();
+            if (ball == null)
+            {
+                ball = m_BallFactory.GenerateRandomBall(BallFactory.BallMode.Scale);
+                ball.SetBallPosition(m_Tiles[i, j].GetPosition());
+                m_Tiles[i, j].SetBall (ball);
+                count++;
+            }
         }
     }
     #endregion
 
     #region private methods
+    void GenerateBallFactory()
+    {
+        GameObject obj = Instantiate(Pre_BallFactory, transform);
+        m_BallFactory = obj.GetComponent<BallFactory>();
+        m_BallFactory.InitBallFactory();
+    }
     IEnumerator GenerateTiles ()
     {
         if (m_Tiles == null)
@@ -90,6 +111,15 @@ public class Board : MonoBehaviour
     #region unity methods
     private void Start() {
         InitBoard();
+    }
+
+    private void Update() {
+
+        if (IsBoardInit() && !m_Temp)
+        {
+            GenerateRandomBalls();
+            m_Temp = true;
+        }
     }
     #endregion
 }

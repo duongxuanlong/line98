@@ -31,7 +31,12 @@ public class Ball : MonoBehaviour
         return m_Mode;
     }
 
-    public void SetObjectActive (bool active)
+    public void SetBallPosition (Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void SetBallActive (bool active)
     {
         gameObject.SetActive(active);
     }
