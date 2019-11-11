@@ -38,6 +38,7 @@ public class BallFactory : MonoBehaviour
 
     public List<Sprite> m_BallSprites;
     public List<Ball> m_Balls;
+    bool m_IsBallFactoryInit = false;
     #endregion
 
     #region prefabs
@@ -50,6 +51,11 @@ public class BallFactory : MonoBehaviour
         StartCoroutine(LoadBallSprites());
 
         StartCoroutine(GenerateBalls());
+    }
+
+    public bool IsBallFacotryInit ()
+    {
+        return m_IsBallFactoryInit;
     }
     #endregion
 
@@ -82,6 +88,8 @@ public class BallFactory : MonoBehaviour
             m_Balls.Add(script);
             yield return null;
         }
+
+        m_IsBallFactoryInit = true;
     }
     #endregion
 

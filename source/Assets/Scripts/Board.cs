@@ -9,16 +9,40 @@ public class Board : MonoBehaviour
     #endregion   
 
     #region variable 
-    List<Tile> m_Tiles;
+    Tile[,] m_Tiles;
     List<Sprite> m_TileSprites;
+    bool m_IsBoardInit = false;
+    int m_Quota;
+    int m_NumberOfBalls;
     #endregion
 
     #region public methods
+    public bool IsBoardInit ()
+    {
+        return m_IsBoardInit;
+    }
     public void InitBoard ()
     {
+        m_Quota = 3;
+
+        m_NumberOfBalls = 0;
+
         LoadTileSprite ();
         
         StartCoroutine(GenerateTiles());
+    }
+
+    public void GenerateRandomBalls ()
+    {
+        int count = 0;
+
+        while (count < m_Quota)
+        {
+            int i = Random.Range(0, Constant.BOARD_ROW);
+            int j = Random.Range(0, Constant.BOARD_COLUMN);
+
+            // if ()
+        }
     }
     #endregion
 
@@ -26,7 +50,7 @@ public class Board : MonoBehaviour
     IEnumerator GenerateTiles ()
     {
         if (m_Tiles == null)
-            m_Tiles = new List<Tile>();
+            m_Tiles = new Tile[Constant.BOARD_ROW, Constant.BOARD_COLUMN];
 
         for (int i = 0; i < Constant.BOARD_ROW; i++)
         {
@@ -41,12 +65,13 @@ public class Board : MonoBehaviour
                 tile.InitTile(i, j);
                 tile.SetPosition(pos);
                 tile.LoadSprite(m_TileSprites[(i + j) % 2]);
-                m_Tiles.Add(tile);
+                m_Tiles[i, j] = tile;
             }
 
         }
         yield return null;
 
+        m_IsBoardInit = true;
     }
 
     void LoadTileSprite ()

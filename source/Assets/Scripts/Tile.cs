@@ -64,6 +64,7 @@ public class Tile : MonoBehaviour
             m_Renderer = GetComponent<SpriteRenderer>();
         PRow = row;
         PColumn = column;
+        m_Ball = null;
     }
 
     public void UpdateTile (float delta)
