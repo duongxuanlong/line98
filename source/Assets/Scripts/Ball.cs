@@ -21,9 +21,21 @@ public class Ball : MonoBehaviour
         return m_Type;
     }
 
+    public Vector3 GetBallPosition ()
+    {
+        return transform.position;
+    }
+
     public void SetBallMode (BallFactory.BallMode mode)
     {
         m_Mode = mode;
+        if (m_Mode == BallFactory.BallMode.Scale)
+        {
+            Vector3 par = Vector3.one;
+            par.x = 0.5f;
+            par.y = 0.5f;
+            SetScale(par);
+        }
     }
 
     public BallFactory.BallMode GetBallMode ()
@@ -56,6 +68,11 @@ public class Ball : MonoBehaviour
     {
         if (m_Renderer == null)
             m_Renderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void SetScale (Vector3 scale)
+    {
+        transform.localScale = scale;
     }
 
     public void UpdateBall (float deltaTime)

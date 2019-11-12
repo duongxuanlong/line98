@@ -248,7 +248,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.3301887, g: 0.26010147, b: 0.26010147, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -600,7 +600,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ffba7eca369de7418e9e2b96b242fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pre_Board: {fileID: 0}
+  Pre_Board: {fileID: 5977267164913681224, guid: 500b35c9e2fec624fb2a2a352c255d2b,
+    type: 3}
 --- !u!4 &1034635493
 Transform:
   m_ObjectHideFlags: 0
@@ -1322,6 +1323,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977267164913681224, guid: 500b35c9e2fec624fb2a2a352c255d2b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5977267164913681230, guid: 500b35c9e2fec624fb2a2a352c255d2b,
         type: 3}

@@ -80,6 +80,12 @@ public class BallFactory : MonoBehaviour
     {
         m_Balls.Add(ball);
     }
+
+    public Sprite GetBallSprite (BallType type)
+    {
+        int index = (int)type;
+        return m_BallSprites[index];
+    }
     #endregion
 
     #region private methods
@@ -111,7 +117,9 @@ public class BallFactory : MonoBehaviour
             script.InitBall();
             script.SetBallActive(false);
             m_Balls.Add(script);
-            yield return null;
+
+            if (i % 9 == 0)
+                yield return null;
         }
 
         m_IsBallFactoryInit = true;
