@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     bool m_FirstTime = true;
     #endregion
 
+    #region unity methods
     void Start()
     {
         if (Pre_Board != null)
@@ -43,6 +44,11 @@ public class GameManager : MonoBehaviour
             m_Board.UpdateBoard(time);
         }
     }
+
+    private void OnApplicationQuit() {
+        PlayerPrefs.SetInt(Constant.SAVE_SCORE, 0);
+    }
+    #endregion
 
     #region enum
     

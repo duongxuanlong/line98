@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\BallFactory.cs" />
      <Compile Include="Assets\Scripts\Board.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\CanvasManager.cs" />
      <Compile Include="Assets\Scripts\Constant.cs" />
      <Compile Include="Assets\Scripts\GameEvent.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />

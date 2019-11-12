@@ -20,4 +20,9 @@
     public const string LAYER_TILE = "TITLE";
     public const string LAYER_BALL = "BALL";
     #endregion 
+
+    #region  save
+    public const string SAVE_SCORE = "SCORE";
+    public const string SAVE_BEST_SCORE = "BEST_SCORE";
+    #endregion
 }

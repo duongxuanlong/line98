@@ -10,8 +10,8 @@ public class Board : MonoBehaviour
     #endregion   
 
     #region delegate - event
-    public delegate void BoardCastEventToTile(GameEvent evt);
-    public static event BoardCastEventToTile EventBoard;
+    public delegate void BoardCastEventToSubcribers(GameEvent evt);
+    public static event BoardCastEventToSubcribers EventBoard;
     #endregion
 
     #region variable 
@@ -27,7 +27,7 @@ public class Board : MonoBehaviour
     bool m_IsBoardInit = false;
     bool m_Temp = false;
     int m_Quota;
-
+    int m_ScorePoint;
     int m_TotalBalls;
     int m_LeastBallsToScore;
     #endregion
@@ -338,6 +338,12 @@ public class Board : MonoBehaviour
         {
             GameEvent evt = new GameEvent();
             evt.PCommand = command;
+            if (command == GameCommand.BOARD_SCORE_POINT)
+            {
+                SimpleJSON.JSONObject obj = new SimpleJSON.JSONObject();
+                obj[Constant.SAVE_SCORE] = m_ScorePoint;
+                evt.PParams = obj;
+            }
             EventBoard(evt);
         }
         
@@ -592,13 +598,15 @@ public class Board : MonoBehaviour
                 item.ReseTile();
                 item.SetBall(null);
             }
+            notifyToUI = true;
+            m_ScorePoint = m_ScoreTiles.Count;
         }
 
         m_ScoreTiles.Clear();
 
         if (notifyToUI)
         {
-
+            BoradcastBoardEvent(GameCommand.BOARD_SCORE_POINT);
         }
         else
         {
@@ -627,6 +635,18 @@ public class Board : MonoBehaviour
         m_RandomBalls.Clear();
     }
 
+    void NotifyFromCanvas (GameEvent evt)
+    {
+        switch (evt.PCommand)
+        {
+            case GameCommand.UI_FINISH_SCORE:
+            {
+                PrepareBoardToPlay();
+                break;
+            }
+        }
+    }
+
     void SetUpParams ()
     {
         m_Quota = 3;
@@ -634,6 +654,8 @@ public class Board : MonoBehaviour
         m_LeastBallsToScore = 5;
 
         m_TotalBalls = 0;
+
+        m_ScorePoint = 0;
 
         m_SelectedTile = null;
 
@@ -698,6 +720,13 @@ public class Board : MonoBehaviour
     #endregion
 
     #region unity methods
+    private void OnEnable() {
+        CanvasManager.EventCanvas += NotifyFromCanvas;
+    }
+
+    private void OnDisable() {
+        CanvasManager.EventCanvas -= NotifyFromCanvas;
+    }
     // private void Start() {
     //     InitBoard();
     // }
