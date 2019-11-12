@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
@@ -29,13 +27,22 @@ public class Ball : MonoBehaviour
     public void SetBallMode (BallFactory.BallMode mode)
     {
         m_Mode = mode;
+        Vector3 par = Vector3.one;
+
         if (m_Mode == BallFactory.BallMode.Scale)
         {
-            Vector3 par = Vector3.one;
             par.x = 0.5f;
             par.y = 0.5f;
-            SetScale(par);
+            m_Renderer.sortingOrder = 0;
         }
+        else if (m_Mode == BallFactory.BallMode.Normal)
+        {
+            par.x = 1;
+            par.y = 1;
+            m_Renderer.sortingOrder = 1;
+        }
+
+        SetScale(par);
     }
 
     public BallFactory.BallMode GetBallMode ()

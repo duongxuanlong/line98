@@ -61,7 +61,7 @@ public class BallFactory : MonoBehaviour
     public Ball GenerateRandomBall (BallMode mode)
     {
         int start = (int)BallType.Blue;
-        int end = (int)BallType.Ghost;
+        int end = (int)BallType.Ghost + 1;
 
         int result = Random.Range(start, end);
         // result = 0;

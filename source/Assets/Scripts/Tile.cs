@@ -34,7 +34,6 @@ public class Tile : MonoBehaviour
     bool m_CanTakeInput = true;
     bool m_IsDestination;
     List<Tile> m_Weights;
-    List<Vector3> m_Paths;
     Vector3 m_Target;
     Vector3 m_Velocity;
     int m_MoveIndex;
@@ -119,8 +118,6 @@ public class Tile : MonoBehaviour
             m_Renderer = GetComponent<SpriteRenderer>();
         if (m_Weights == null)
             m_Weights = new List<Tile>();
-        if (m_Paths == null)
-            m_Paths = new List<Vector3>();
 
         PRow = row;
         PColumn = column;
@@ -138,12 +135,12 @@ public class Tile : MonoBehaviour
     {
         switch (evt.PCommand)
         {
-            case GameCommand.TILE_CAN_RECEIVE_INPUT:
+            case GameCommand.BOARD_CAN_RECEIVE_INPUT:
             {
                 m_CanTakeInput = true;
                 break;
             }
-            case GameCommand.TILE_STOP_RECEIVE_INPUT:
+            case GameCommand.BOARD_STOP_RECEIVE_INPUT:
             {
                 m_CanTakeInput = false;
                 break;
@@ -159,6 +156,7 @@ public class Tile : MonoBehaviour
             {
                 float time = m_SmoothTime - m_RunningTime;
                 bool updateTime = true;
+                bool publishEventToBoard = false;
                 Vector3 des = Vector3.zero;
                 if (time < 0)
                 {
@@ -173,6 +171,7 @@ public class Tile : MonoBehaviour
                     else
                     {
                         m_IsDestination = false;
+                        publishEventToBoard = true;
                     }
                     updateTime = false;
                     m_RunningTime = 0;
@@ -184,6 +183,8 @@ public class Tile : MonoBehaviour
                 m_Ball.SetBallPosition(des);
                 if (updateTime)
                     m_RunningTime += delta;
+                if (publishEventToBoard)
+                    PublishEventToBoard(GameCommand.TILE_FINISH_MOVE_TO_TARGET);
             }
             else
             {
@@ -194,44 +195,13 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region private methods
-    void SetupPaths ()
+    void PublishEventToBoard (GameCommand command)
     {
-        // int row = -1;
-        // int column = -1;
-        // Vector3 pos = Vector3.zero;
-
-        // var item1 = m_Weights[0];
-        var item2 = m_Weights[1];
-        int row = item2.PRow;
-        int column = item2.PColumn;
-        Vector3 pos = item2.GetPosition();
-
-        m_Paths.Add(pos);
-        int count = m_Weights.Count - 1;
-
-        // foreach (var item in m_Weights)
-        for (int i = 2; i < count; ++i)
+        if (command > GameCommand.TILE_START && command < GameCommand.TILE_END)
         {
-            var item = m_Weights[i];
-            var temp = item.GetPosition();
-            if (row == -1 || column == -1)
-            {
-                row = item.PRow;
-                column = item.PColumn;
-                
-                pos.x = temp.x;
-                pos.y = temp.y;
-                m_Paths.Add(pos);
-            }
-            else
-            {
-                int lastIndex = m_Paths.Count - 1;
-                if (row == item.PRow)
-                {
-                    pos.y = temp.y;
-
-                }
-            }
+            GameEvent evt = new GameEvent();
+            evt.PCommand = command;
+            m_Board.NotifyFromTile(evt, this);
         }
     }
     #endregion
@@ -241,8 +211,12 @@ public class Tile : MonoBehaviour
 
         if (m_CanTakeInput)
         {
-            m_Board.NotifyFromTile(this);
+            // GameEvent evt = new GameEvent();
+            // evt.PCommand = GameCommand.TILE_SELECT;
+            // m_Board.NotifyFromTile(evt, this);
             // Debug.Log("Tile x: " + PRow + " and y: " + PColumn);
+
+            PublishEventToBoard(GameCommand.TILE_SELECT);
         }
     }
 
