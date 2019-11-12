@@ -28,7 +28,7 @@ public class Board : MonoBehaviour
     bool m_Temp = false;
     int m_Quota;
     int m_ScorePoint;
-    int m_TotalBalls;
+    public int m_TotalBalls;
     int m_LeastBallsToScore;
     #endregion
 
@@ -130,7 +130,7 @@ public class Board : MonoBehaviour
             case GameCommand.TILE_FINISH_MOVE_TO_TARGET:
             {
                 // score game point
-                HandleScoreBalls(caller);
+                HandleScoreTiles(caller);
 
                 // convert ball from scale mode to normal mode
                 // ChangeBallToNormalMode();
@@ -399,7 +399,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    void HandleScoreBalls (Tile caller)
+    void HandleScoreTiles (Tile caller)
     {
         //horizontal with left
         m_ScoreTiles.Clear();
@@ -604,6 +604,7 @@ public class Board : MonoBehaviour
             }
             notifyToUI = true;
             m_ScorePoint = m_ScoreTiles.Count;
+            m_TotalBalls -= m_ScoreTiles.Count;
         }
 
         m_ScoreTiles.Clear();
