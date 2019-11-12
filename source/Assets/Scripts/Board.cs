@@ -167,12 +167,14 @@ public class Board : MonoBehaviour
             for (int j = 0; j < Constant.BOARD_COLUMN; ++j)
             m_Tiles[i, j].ReseTile();
     }
-    bool CheckMoveTile (Tile targetTile, int weight)
+    bool CheckMoveTile (Tile source, Tile targetTile, int weight)
     {
         bool isValid = false;
 
-        if ((targetTile.GetBall() == null || targetTile.GetBall().GetBallMode() == BallFactory.BallMode.Scale)
-            && targetTile != m_SelectedTile)
+        if ((targetTile.GetBall() == null 
+            || targetTile.GetBall().GetBallMode() == BallFactory.BallMode.Scale
+            || source.GetBall().GetBallType() == BallFactory.BallType.Ghost)
+            && targetTile != source)
         {
             if (targetTile.GetWeight() == 0 || (weight + 1 < targetTile.GetWeight()))
             {
@@ -224,7 +226,7 @@ public class Board : MonoBehaviour
             if (row - 1 >= 0)
             {
                 Tile up = m_Tiles[row - 1, column];
-                if (CheckMoveTile(up, weight))
+                if (CheckMoveTile(m_SelectedTile, up, weight))
                 {
                     up.AddWeight(temp);
                     m_Utility.Add(up);
@@ -244,7 +246,7 @@ public class Board : MonoBehaviour
             if (row + 1 < Constant.BOARD_ROW)
             {
                 Tile low = m_Tiles[row + 1, column];
-                if (CheckMoveTile(low, weight))
+                if (CheckMoveTile(m_SelectedTile, low, weight))
                 {
                     low.AddWeight(temp);
                     m_Utility.Add(low);
@@ -263,7 +265,7 @@ public class Board : MonoBehaviour
             if (column - 1 >= 0)
             {
                 Tile left = m_Tiles[row, column - 1];
-                if (CheckMoveTile(left, weight))
+                if (CheckMoveTile(m_SelectedTile, left, weight))
                 {
                     left.AddWeight(temp);
                     m_Utility.Add(left);
@@ -282,7 +284,7 @@ public class Board : MonoBehaviour
             if (column + 1 < Constant.BOARD_COLUMN)
             {
                 Tile right = m_Tiles[row, column + 1];
-                if (CheckMoveTile(right, weight))
+                if (CheckMoveTile(m_SelectedTile, right, weight))
                 {
                     right.AddWeight(temp);
                     m_Utility.Add(right);
