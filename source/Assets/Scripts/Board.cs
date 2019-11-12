@@ -147,17 +147,52 @@ public class Board : MonoBehaviour
 
     public void UpdateBoard (float delta)
     {
-        if (m_SelectedTile != null)
-            m_SelectedTile.UpdateTile(delta);
+        // if (m_SelectedTile != null)
+        //     m_SelectedTile.UpdateTile(delta);
 
-        if (m_TargetTile != null)
+        // if (m_TargetTile != null)
+        // {
+        //     m_TargetTile.UpdateTile(delta);
+        // }
+        for (int i = 0; i < Constant.BOARD_ROW; ++i)
+            for (int j = 0; j < Constant.BOARD_COLUMN; ++j)
+                m_Tiles[i, j].UpdateTile(delta);
+
+        if (m_ScoreTiles.Count > 0)
         {
-            m_TargetTile.UpdateTile(delta);
+            bool finish = true;
+            foreach (var item in m_ScoreTiles)
+            {
+                Ball ball = item.GetBall();
+                if (!ball.IsBlinkAnimFinish())
+                {
+                    finish = false;
+                    break;
+                }
+            }
+
+            if (finish)
+            {
+                ReleaseBallsFromTiles();
+                PrepareBoardToPlay();
+            }
         }
     }
     #endregion
 
     #region private methods
+    void ReleaseBallsFromTiles ()
+    {
+        foreach ( var item in m_ScoreTiles)
+        {
+            Ball ball = item.GetBall();
+            ball.SetBallActive(false);
+            m_BallFactory.AddBallToFactory(ball);
+            item.ReseTile();
+            item.SetBall(null);
+        }
+        m_ScoreTiles.Clear();
+    }
     void ResetBoard ()
     {
         m_SelectedTile = null;
@@ -381,7 +416,10 @@ public class Board : MonoBehaviour
         if (m_SelectedTile == null)
         {
             if (ball != null && ball.GetBallMode() != BallFactory.BallMode.Scale)
+            {
                 m_SelectedTile = caller;
+                m_SelectedTile.PlayBallSelectedAnimation(true);
+            }
             // Debug.Log("Select tile");
         }
         else
@@ -389,10 +427,12 @@ public class Board : MonoBehaviour
             // find shortest path
             if (ball == null)
             {
+                m_SelectedTile.PlayBallSelectedAnimation(false);
                 FindShortestPath(caller);
             }
             else // do nothing
             {
+                m_SelectedTile.PlayBallSelectedAnimation(false);
                 m_SelectedTile = null;
             }
             // Debug.Log("Find something");
@@ -594,20 +634,21 @@ public class Board : MonoBehaviour
         // what can I do here
         if (m_ScoreTiles.Count >= m_LeastBallsToScore)
         {
-            foreach ( var item in m_ScoreTiles)
-            {
-                Ball ball = item.GetBall();
-                ball.SetBallActive(false);
-                m_BallFactory.AddBallToFactory(ball);
-                item.ReseTile();
-                item.SetBall(null);
-            }
+            // foreach ( var item in m_ScoreTiles)
+            // {
+            //     Ball ball = item.GetBall();
+            //     ball.SetBallActive(false);
+            //     m_BallFactory.AddBallToFactory(ball);
+            //     item.ReseTile();
+            //     item.SetBall(null);
+            // }
             notifyToUI = true;
             m_ScorePoint = m_ScoreTiles.Count;
             m_TotalBalls -= m_ScoreTiles.Count;
         }
 
-        m_ScoreTiles.Clear();
+        if (m_ScoreTiles.Count < m_LeastBallsToScore)
+            m_ScoreTiles.Clear();
 
         if (notifyToUI)
         {
@@ -630,6 +671,12 @@ public class Board : MonoBehaviour
         BoradcastBoardEvent(GameCommand.BOARD_CAN_RECEIVE_INPUT);
     }
 
+    void PlayBlinkAnim ()
+    {
+        foreach (var item in m_ScoreTiles)
+            item.PlayBallBlinkAnim();
+    }
+
     void ChangeBallToNormalMode ()
     {
         foreach (var item in m_RandomBalls)
@@ -646,7 +693,8 @@ public class Board : MonoBehaviour
         {
             case GameCommand.UI_FINISH_SCORE:
             {
-                PrepareBoardToPlay();
+                // PrepareBoardToPlay();
+                PlayBlinkAnim();
                 break;
             }
         }

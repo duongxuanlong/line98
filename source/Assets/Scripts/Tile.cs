@@ -112,6 +112,21 @@ public class Tile : MonoBehaviour
         return m_Ball;
     }
 
+    public void PlayBallSelectedAnimation (bool play)
+    {
+        if (play)
+        {
+            m_Ball.SetOriginalPosition(transform.position);
+        }
+
+        m_Ball.PlaySelectedAnimation(play);
+    }
+
+    public void PlayBallBlinkAnim ()
+    {
+        m_Ball.PlayBlinkAnimation();
+    }
+
     public void InitTile (int row, int column, Board board)
     {
         if (m_Renderer == null)
