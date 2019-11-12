@@ -195,6 +195,10 @@ public class Board : MonoBehaviour
         {
             target = null;
         }
+        else if (target.GetBall().GetBallMode() == BallFactory.BallMode.Scale)
+        {
+            target = null;
+        }
         else
         {
             BallFactory.BallType targetType = target.GetBall().GetBallType();
