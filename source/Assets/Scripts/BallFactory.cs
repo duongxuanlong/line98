@@ -7,6 +7,7 @@ public class BallFactory : MonoBehaviour
     #region enum
     public enum BallType 
     {
+        None = -1,
         Blue,
         Brown,
         Green,

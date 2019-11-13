@@ -19,6 +19,8 @@ public class Board : MonoBehaviour
     List<Sprite> m_TileSprites;
     List<Tile> m_Utility;
     List<Tile> m_ScoreTiles;
+    List<Tile> m_ErrorTiles;
+    List<Tile> m_GhostTiles;
     List<Ball> m_ShowingBalls;
     List<Ball> m_RandomBalls;
     BallFactory m_BallFactory;
@@ -275,15 +277,6 @@ public class Board : MonoBehaviour
                     up.AddWeight(temp);
                     m_Utility.Add(up);
                 }
-                // if ((up.GetBall() == null || up.GetBall().GetBallMode() == BallFactory.BallMode.Scale)
-                //     && up != m_SelectedTile)
-                // {
-                //     if (up.GetWeight() == 0 || (weight + 1 < up.GetWeight()))
-                //     {
-                //         up.AddWeight(temp);
-                //         m_Utility.Add(up);
-                //     }
-                // }
             }
 
             //lower
@@ -295,14 +288,6 @@ public class Board : MonoBehaviour
                     low.AddWeight(temp);
                     m_Utility.Add(low);
                 }
-                // if (low.GetBall() == null && low != m_SelectedTile)
-                // {
-                //     if (low.GetWeight() == 0 || (weight + 1 < low.GetWeight()))
-                //     {
-                //         low.AddWeight(temp);
-                //         m_Utility.Add(low);
-                //     }
-                // }
             }
 
             //left
@@ -314,14 +299,6 @@ public class Board : MonoBehaviour
                     left.AddWeight(temp);
                     m_Utility.Add(left);
                 }
-                // if (left.GetBall () == null && left != m_SelectedTile)
-                // {
-                //     if (left.GetWeight() == 0 || (weight + 1 < left.GetWeight()))
-                //     {
-                //         left.AddWeight(temp);
-                //         m_Utility.Add(left);
-                //     }
-                // }
             }
 
             //right 
@@ -333,28 +310,9 @@ public class Board : MonoBehaviour
                     right.AddWeight(temp);
                     m_Utility.Add(right);
                 }
-                // if (right.GetBall() == null && right != m_SelectedTile)
-                // {
-                //     if (right.GetWeight() == 0 || (weight + 1 < right.GetWeight()))
-                //     {
-                //         right.AddWeight(temp);
-                //         m_Utility.Add(right);
-                //     }
-                // }
             }
         }
 
-        // Debug.Log("Shortest path");
-        // for (int i = 0; i < Constant.BOARD_ROW; ++i)
-        //     for (int j = 0; j < Constant.BOARD_COLUMN; ++j)
-        //         Debug.Log("i: " + i + " and j: " + j + " with weight: " + m_Tiles[i, j].GetWeight());
-        // var paths = destination.GetShortestPath();
-        // foreach (var item in paths)
-        // {
-        //     Debug.Log("Tile x: " + item.PRow + " and y: " + item.PColumn);
-        // }
-
-        // Debug.Log("Tile x: " + destination.PRow + " and y: " + destination.PColumn);
         ResolveShortestPaths(destination);
     }
 
@@ -429,15 +387,16 @@ public class Board : MonoBehaviour
         }
         else
         {
+            m_SelectedTile.PlayBallSelectedAnimation(false);
             // find shortest path
             if (ball == null)
             {
-                m_SelectedTile.PlayBallSelectedAnimation(false);
+                // m_SelectedTile.PlayBallSelectedAnimation(false);
                 FindShortestPath(caller);
             }
             else // do nothing
             {
-                m_SelectedTile.PlayBallSelectedAnimation(false);
+                // m_SelectedTile.PlayBallSelectedAnimation(false);
                 m_SelectedTile = null;
             }
             // Debug.Log("Find something");
@@ -448,7 +407,6 @@ public class Board : MonoBehaviour
     {
         //horizontal with left
         m_ScoreTiles.Clear();
-        // m_ScoreTiles.Add(caller.GetBall());
         m_ScoreTiles.Add(caller);
         Tile source = caller;
         int row = caller.PRow;
@@ -458,8 +416,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -477,8 +433,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -496,7 +450,6 @@ public class Board : MonoBehaviour
 
         //vertical with up
         m_ScoreTiles.Clear();
-        // m_ScoreTiles.Add(caller.GetBall());
         m_ScoreTiles.Add(caller);
         source = caller;
         row = caller.PRow;
@@ -506,8 +459,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -525,8 +476,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -544,7 +493,6 @@ public class Board : MonoBehaviour
 
         //diagonal left-up to right down
         m_ScoreTiles.Clear();
-        // m_ScoreTiles.Add(caller.GetBall());
         m_ScoreTiles.Add(caller);
         source = caller;
         row = caller.PRow;
@@ -554,8 +502,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -572,8 +518,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -591,7 +535,6 @@ public class Board : MonoBehaviour
 
         //diagonal with left-down to right-up
         m_ScoreTiles.Clear();
-        // m_ScoreTiles.Add(caller.GetBall());
         m_ScoreTiles.Add(caller);
         source = caller;
         row = caller.PRow;
@@ -601,8 +544,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -619,8 +560,6 @@ public class Board : MonoBehaviour
             Tile target = CheckScoreTile(source, row, colum);
             if (target != null)
             {
-                // Ball ball = target.GetBall();
-                // m_ScoreTiles.Add(ball);
                 m_ScoreTiles.Add(target);
                 source = target;
             }
@@ -633,36 +572,111 @@ public class Board : MonoBehaviour
         ResolveScoreTiles();
     }
 
-    void ResolveScoreTiles ()
+    bool CheckScoreTiles ()
     {
-        bool notifyToUI = false;
-        // what can I do here
-        if (m_ScoreTiles.Count >= m_LeastBallsToScore)
-        {
-            // foreach ( var item in m_ScoreTiles)
-            // {
-            //     Ball ball = item.GetBall();
-            //     ball.SetBallActive(false);
-            //     m_BallFactory.AddBallToFactory(ball);
-            //     item.ReseTile();
-            //     item.SetBall(null);
-            // }
-            notifyToUI = true;
-            m_ScorePoint = m_ScoreTiles.Count;
-            m_TotalBalls -= m_ScoreTiles.Count;
-        }
+        // var firstTile = m_ScoreTiles[0];
+        m_GhostTiles.Clear();
+        m_ErrorTiles.Clear();
 
-        if (m_ScoreTiles.Count < m_LeastBallsToScore)
-            m_ScoreTiles.Clear();
+        int total = m_ScoreTiles.Count;
+        bool isValid = false;
 
-        if (notifyToUI)
+        if (total < m_LeastBallsToScore)
         {
-            BoradcastBoardEvent(GameCommand.BOARD_SCORE_POINT);
+            isValid = false;
         }
         else
         {
+            BallFactory.BallType type = BallFactory.BallType.None;
+            
+            foreach (var  item in m_ScoreTiles)
+            {
+                if (item.GetBall().GetBallType() != BallFactory.BallType.Ghost)
+                {
+                    if (type == BallFactory.BallType.None)
+                        type = item.GetBall().GetBallType();
+                    else
+                    {
+                        if (type != item.GetBall().GetBallType())
+                        {
+                            m_ErrorTiles.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    m_GhostTiles.Add(item);
+                }
+            }
+
+            if (total - m_ErrorTiles.Count >= m_LeastBallsToScore)
+            {
+                isValid = true;
+                if (m_ErrorTiles.Count > 0)
+                {
+                    foreach (var item in m_ErrorTiles)
+                    {
+                        m_ScoreTiles.Remove(item);
+                    }
+                }
+            }
+            else
+            {
+                if (m_ErrorTiles.Count + m_GhostTiles.Count >= m_LeastBallsToScore)
+                {
+                    isValid = true;
+
+                    m_ScoreTiles.Clear();
+                    foreach (var item in m_GhostTiles)
+                    {
+                        m_ScoreTiles.Add(item);   
+                    }
+                    foreach (var item in m_ErrorTiles)
+                    {
+                        m_ScoreTiles.Add(item);
+                    }
+                }
+            }
+        }
+
+        return isValid;
+    }
+
+    void ResolveScoreTiles ()
+    {
+        bool isvalid = CheckScoreTiles();
+
+        // bool notifyToUI = false;
+        // what can I do here
+        if (isvalid)
+        {
+            // if (m_ScoreTiles.Count >= m_LeastBallsToScore)
+            {
+                // notifyToUI = true;
+                m_ScorePoint = m_ScoreTiles.Count;
+                m_TotalBalls -= m_ScoreTiles.Count;
+
+                BoradcastBoardEvent(GameCommand.BOARD_SCORE_POINT);
+            }
+        }
+        else
+        {
+            m_ScoreTiles.Clear();
+
             PrepareBoardToPlay();
         }
+
+        // if (m_ScoreTiles.Count < m_LeastBallsToScore)
+        //     m_ScoreTiles.Clear();
+
+        // if (notifyToUI)
+        // {
+        //     BoradcastBoardEvent(GameCommand.BOARD_SCORE_POINT);
+        // }
+        // else
+        // {
+        //     PrepareBoardToPlay();
+        // }
     }
 
     void PrepareBoardToPlay ()
@@ -731,6 +745,12 @@ public class Board : MonoBehaviour
 
         if (m_ScoreTiles == null)
             m_ScoreTiles = new List<Tile>();
+
+        if (m_ErrorTiles == null)
+            m_ErrorTiles = new List<Tile>();
+
+        if (m_GhostTiles == null)
+            m_GhostTiles = new List<Tile>();
 
         if (m_RandomBalls == null)
             m_RandomBalls = new List<Ball>();
