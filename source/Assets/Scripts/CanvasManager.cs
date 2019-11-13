@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class CanvasManager : MonoBehaviour
     #region reference
     public Text Ref_ScoreTxt;
     public Text Ref_BestScoreTxt;
+    public Button Ref_Replay;
     #endregion
     // Start is called before the first frame update
     
@@ -26,6 +28,9 @@ public class CanvasManager : MonoBehaviour
         
         if (Ref_BestScoreTxt != null)
             Ref_BestScoreTxt.text = "" + bestscore;
+
+        if (Ref_Replay != null)
+            Ref_Replay.gameObject.SetActive(false);
     }
 
     private void OnEnable() {
@@ -61,6 +66,12 @@ public class CanvasManager : MonoBehaviour
         BroadcastCanvasEvent(GameCommand.UI_FINISH_SCORE);
     }
 
+    void TriggerGameOver ()
+    {
+        if (Ref_Replay != null)
+            Ref_Replay.gameObject.SetActive(true);
+    }
+
     void BroadcastCanvasEvent (GameCommand command)
     {
         if (command > GameCommand.UI_START && command < GameCommand.UI_END)
@@ -79,11 +90,20 @@ public class CanvasManager : MonoBehaviour
                 HandleScorePoint(evt.PParams);
                 break;
             }
+
+            case GameCommand.BOARD_GAME_OVER:
+            {
+                TriggerGameOver();
+                break;
+            }
         }
     }
     #endregion
 
     #region public methods
-    // public void On
+    public void RestartGame ()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     #endregion
 }

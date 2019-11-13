@@ -13,6 +13,6 @@ public class CameraController : MonoBehaviour
         SInstance.orthographicSize = Constant.UNITY_HALF_HEIGHT;
 
         Constant.BOARD_START_Y = -Constant.UNITY_HALF_HEIGHT + ((Constant.TILE_UNIT * Constant.BOARD_ROW) + Constant.TILE_UNIT);
-        Debug.Log("Long Board start y: " + Constant.BOARD_START_Y);
+        // Debug.Log("Long Board start y: " + Constant.BOARD_START_Y);
     }
 }

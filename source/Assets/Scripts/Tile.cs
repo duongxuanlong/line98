@@ -31,7 +31,7 @@ public class Tile : MonoBehaviour
     SpriteRenderer m_Renderer;
     Ball m_Ball;
     Board m_Board;
-    bool m_CanTakeInput = true;
+    public bool m_CanTakeInput = true;
     bool m_IsDestination;
     List<Tile> m_Weights;
     Vector3 m_Target;

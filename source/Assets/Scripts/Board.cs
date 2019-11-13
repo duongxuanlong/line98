@@ -26,6 +26,7 @@ public class Board : MonoBehaviour
     Tile m_TargetTile;
     bool m_IsBoardInit = false;
     bool m_Temp = false;
+    bool m_GameOver;
     int m_Quota;
     int m_ScorePoint;
     public int m_TotalBalls;
@@ -82,8 +83,12 @@ public class Board : MonoBehaviour
         }
         else
         {
-            total = Constant.BOARD_ROW * Constant.BOARD_COLUMN - m_TotalBalls;
-            m_TotalBalls = Constant.BOARD_COLUMN * Constant.BOARD_ROW;
+            // total = Constant.BOARD_ROW * Constant.BOARD_COLUMN - m_TotalBalls;
+            // m_TotalBalls = Constant.BOARD_COLUMN * Constant.BOARD_ROW;
+            // BoradcastBoardEvent(GameCommand.BOARD_STOP_RECEIVE_INPUT);
+            m_GameOver = true;
+            BoradcastBoardEvent(GameCommand.BOARD_GAME_OVER);
+            return;
         }
 
         while (count < total)
@@ -668,7 +673,10 @@ public class Board : MonoBehaviour
 
         ResetBoard();
 
-        BoradcastBoardEvent(GameCommand.BOARD_CAN_RECEIVE_INPUT);
+        if (m_GameOver)
+            BoradcastBoardEvent(GameCommand.BOARD_STOP_RECEIVE_INPUT);
+        else
+            BoradcastBoardEvent(GameCommand.BOARD_CAN_RECEIVE_INPUT);
     }
 
     void PlayBlinkAnim ()
@@ -702,6 +710,7 @@ public class Board : MonoBehaviour
 
     void SetUpParams ()
     {
+        m_GameOver = false;
         m_Quota = 3;
 
         m_LeastBallsToScore = 5;

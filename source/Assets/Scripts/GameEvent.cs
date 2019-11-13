@@ -7,6 +7,7 @@ public enum  GameCommand
     BOARD_STOP_RECEIVE_INPUT,
     BOARD_CAN_RECEIVE_INPUT,
     BOARD_SCORE_POINT,
+    BOARD_GAME_OVER,
     BOARD_END,
     //tile
     TILE_START,
@@ -15,7 +16,7 @@ public enum  GameCommand
     TILE_END,
     UI_START,
     UI_FINISH_SCORE,
-    UI_END
+    UI_END,
 
 }
 public struct GameEvent
